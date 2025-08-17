@@ -1,0 +1,4 @@
+python-binance==1.0.19
+python-dotenv==1.0.0
+# pandas is optional and requires build tools on Windows; omit for now
+
