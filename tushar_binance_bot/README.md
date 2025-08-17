@@ -48,7 +48,7 @@ tushar_binance_bot/
 
 ```powershell
 git clone https://github.com/TusharNag-Skull/tushar-binance-bot
-cd tushar-finance-bot
+cd tushar-binance-bot
 
 ```
 2) Install Dependencies:
