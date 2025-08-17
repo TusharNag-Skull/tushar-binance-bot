@@ -4,7 +4,7 @@ This project places and manages Binance USD‑M Futures orders via CLI. It suppo
 
 - Market orders
 - Limit orders
-- (Bonus) Stop‑Limit, OCO‑like TP/SL management, TWAP, and Grid placement
+- Stop‑Limit, OCO‑like TP/SL management, TWAP, and Grid placement
 
 Always use Binance Futures Testnet for development.
 
@@ -13,7 +13,7 @@ Always use Binance Futures Testnet for development.
 Clone/extract with this layout:
 
 ```
-rahul_binance_bot/
+tushar_binance_bot/
 ├── src/
 │   ├── __init__.py
 │   ├── market_orders.py
@@ -36,21 +36,27 @@ rahul_binance_bot/
 
 - Python 3.10+ installed (`py --version`)
 - Binance Futures Testnet API key/secret from `https://testnet.binancefuture.com`
+```
+1. Go to the link provided
+2. Login
+3. Scroll down the page you will find the required API and the SECRET key
+```
 
 ### 3. Setup
 
-1) In PowerShell:
+1) Clone Repository:
 
 ```powershell
-cd "C:\Users\rahul\Downloads\PrimeTradeAi\rahul_binance_bot"
-py -m venv .venv
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
+git clone https://github.com/TusharNag-Skull/tushar-binance-bot
+cd tushar-finance-bot
 
-2) Configure environment variables:
+```
+2) Install Dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+3) Configure environment variable:
 
 - Copy `.env.example` to `.env` and fill in your Testnet keys:
 
@@ -60,11 +66,12 @@ BINANCE_SECRET_KEY=your_secret_key_here
 USE_TESTNET=True
 ```
 
-3) Connectivity check:
+4) Connectivity check:
 
 ```powershell
 python -c "from src.config import get_client; print(get_client().futures_ping())"
 ```
+
 
 ### 4. Usage
 
@@ -73,7 +80,7 @@ All commands run from repo root.
 - Market order:
 
 ```powershell
-python src\market_orders.py BTCUSDT BUY 0.01
+python src/market_orders.py BTCUSDT BUY 0.01
 ```
 
 - Limit order:
@@ -97,7 +104,7 @@ python src\advanced\oco.py BTCUSDT SELL 0.01 46000 44000
 - TWAP (split total quantity into slices over time):
 
 ```powershell
-python src\advanced\twap.py BTCUSDT BUY 1.0 60 5
+.\.venv\Scripts\python.exe src\advanced\twap.py BTCUSDT BUY 0.05 60 10
 ```
 
 - Grid (static placement of buy/sell limits across range):
@@ -117,14 +124,8 @@ python src\advanced\grid.py BTCUSDT 44000 46000 10 0.01
 - Insufficient balance: fund Testnet USD‑M Futures wallet and transfer to Futures.
 - Network errors: retry later; rate limits may apply.
 
-### 7. Notes
 
-- OCO in USD‑M Futures is emulated by placing TP limit and SL market orders with `reduceOnly=True` and canceling the other when one fills.
-- Always test on Testnet first.
-
-
-
-### 8. Parameter and Validation Notes
+### 7. Parameter and Validation Notes
 
 - Use USDT‑margined symbols (e.g., `BTCUSDT`).
 - Quantity and price must satisfy exchange filters:
@@ -133,7 +134,7 @@ python src\advanced\grid.py BTCUSDT 44000 46000 10 0.01
   - Min notional: price × quantity ≥ 100 (approx., varies by symbol)
 - If you get “Order would immediately trigger,” move TP higher or SL lower relative to the current price.
 
-### 9. Checking Account State
+### 8. Checking Account State
 
 ```powershell
 \.venv\Scripts\python.exe -c "from src.config import get_client; c=get_client(); print('balance=', c.futures_account_balance()); print('position=', c.futures_position_information(symbol='BTCUSDT')); print('open=', c.futures_get_open_orders(symbol='BTCUSDT'))"
@@ -145,7 +146,7 @@ Cancel all open orders (per symbol):
 \.venv\Scripts\python.exe -c "from src.config import get_client; print(get_client().futures_cancel_all_open_orders(symbol='BTCUSDT'))"
 ```
 
-### 10. Test Checklist (before submission)
+### 9. Test Checklist (before submission)
 
 ```powershell
 # Connectivity
@@ -171,7 +172,7 @@ Cancel all open orders (per symbol):
 \.venv\Scripts\python.exe -c "from src.config import get_client; print(get_client().futures_cancel_all_open_orders(symbol='BTCUSDT'))"
 ```
 
-### 11. Logs
+### 10. Logs
 
 - Actions are logged to `bot.log` in the project root.
 
@@ -179,13 +180,7 @@ Cancel all open orders (per symbol):
 Get-Content -Tail 100 .\bot.log
 ```
 
-### 12. Submission Checklist
-
-- Private GitHub repo with project contents; grant instructor access.
-- ZIP archive of the project folder (exclude `.venv/` if requested).
-- `report.pdf` with required screenshots/analysis.
-
-### 13. Security Notes
+### 11. Security Notes
 
 - Never commit real API keys. Keep them in `.env` and do not push `.env` to Git.
 - Revoke any keys that were shared publicly and generate new Testnet keys.
